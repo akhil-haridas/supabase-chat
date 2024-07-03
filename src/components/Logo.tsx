@@ -21,7 +21,7 @@ const AppLogo = () => {
                     ></path>
                 </svg>
             </div>
-            <div className="ml-2 font-bold text-2xl">QuickChat</div>
+            <div className="ml-2 font-bold text-2xl">Code Chat</div>
         </div>
     )
 }

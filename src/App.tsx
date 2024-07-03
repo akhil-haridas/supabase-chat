@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import { ChatPage, LoginPage } from "./pages";
@@ -26,8 +26,8 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={session ? <ChatPage user={user} /> : <Navigate to={'/login'} />} />
-        <Route path="/login" element={session ? <Navigate to={'/'} /> : <LoginPage />} />
+        <Route path="/" element={session && user ? <ChatPage user={user} /> : <Navigate to={'/login'} />} />
+        <Route path="/login" element={session && user ? <Navigate to={'/'} /> : <LoginPage />} />
       </Routes>
     </Router>
   );
