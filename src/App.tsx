@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import { ChatPage, LoginPage } from "./pages";
 import { supabase } from "./supabase";
 
@@ -26,8 +31,20 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={session && user ? <ChatPage user={user} /> : <Navigate to={'/login'} />} />
-        <Route path="/login" element={session && user ? <Navigate to={'/'} /> : <LoginPage />} />
+        <Route
+          path="/"
+          element={
+            session && user ? (
+              <ChatPage user={user} />
+            ) : (
+              <Navigate to={"/login"} />
+            )
+          }
+        />
+        <Route
+          path="/login"
+          element={session && user ? <Navigate to={"/"} /> : <LoginPage />}
+        />
       </Routes>
     </Router>
   );
