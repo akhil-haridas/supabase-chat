@@ -1,5 +1,3 @@
-import React from 'react'
-
 const AppLogo = () => {
     return (
         <div className="flex flex-row items-center justify-center h-12 w-full">
