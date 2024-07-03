@@ -1,13 +1,17 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabase";
 
 const LoginPage = () => {
+    const navigate = useNavigate();
+
     const signInWithGoogle = async () => {
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
-        })
+        });
 
         if (error) console.error("Error signing in with Google: ", error.message);
+        else navigate('/');
     };
 
     return (
