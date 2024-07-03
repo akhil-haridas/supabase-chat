@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import { ChatPage, LoginPage } from "./pages";
 import { supabase } from "./supabase";
 
 const App = () => {
   const [session, setSession] = useState<any>(null);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      if (session) setUser(session?.user?.user_metadata);
     });
 
     const {
@@ -21,13 +23,11 @@ const App = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  console.log("session ::", session);
-
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<ChatPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/" element={session ? <ChatPage user={user} /> : <Navigate to={'/login'} />} />
+        <Route path="/login" element={session ? <Navigate to={'/'} /> : <LoginPage />} />
       </Routes>
     </Router>
   );
