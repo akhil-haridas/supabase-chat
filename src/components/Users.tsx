@@ -23,6 +23,7 @@ const Chatlist = () => {
 
         fetchUsers();
     }, []);
+
     return (
         <div className="flex flex-col mt-8 max-h-70">
             <div className="flex flex-row items-center justify-between text-xs">
