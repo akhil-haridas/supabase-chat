@@ -43,7 +43,7 @@ const ChatMessages = () => {
             .channel("chat-room")
             .on("postgres_changes", { event: "INSERT", table: "messages", }, (payload: any) => {
                 console.log(payload)
-                getMessages();
+                // getMessages();
             }).subscribe();
 
         return () => {

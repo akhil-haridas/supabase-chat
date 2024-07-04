@@ -9,6 +9,9 @@ export default {
       maxHeight: {
         '70': '70%',  // Custom max-height value
       },
+      minWidth: {
+        '41': '41px',  // Custom max-height value
+      },
     },
   },
   plugins: [],

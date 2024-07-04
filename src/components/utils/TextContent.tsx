@@ -10,7 +10,6 @@ interface ContentProps {
 }
 
 const Content: React.FC<ContentProps> = ({ currentUser, content }) => {
-    console.log(content);
 
     const formatTime = (date: Date) => {
         let hours = date.getHours();
@@ -52,7 +51,7 @@ const Content: React.FC<ContentProps> = ({ currentUser, content }) => {
                     </div>
                 </div>
             ) : (
-                <div className="col-start-1 col-end-8 p-3 rounded-lg">
+                <div className="col-start-1 col-end-8 p-6 rounded-lg">
                     <div className="flex flex-row items-center">
                         <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
                             {content?.user?.picture ? (
