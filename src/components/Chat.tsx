@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState, useRef } from "react";
 import { TextContent } from "./utils";
 import { Loading } from "../pages";
 import { supabaseClient } from "../supabase/supabaseClient";
@@ -7,8 +7,13 @@ import { RootState } from "../context/store";
 
 const ChatMessages = () => {
     const [messages, setMessages] = useState<any[]>([]);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
     const { id } = useSelector((state: RootState) => state.user.userData);
     const users = useSelector((state: RootState) => state.user.usersData);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
 
     const getMessages = async () => {
         try {
@@ -56,6 +61,10 @@ const ChatMessages = () => {
         };
     }, []);
 
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
+
     return (
         <Suspense fallback={<Loading />}>
             <div className="flex flex-col h-full overflow-x-auto mb-4">
@@ -68,6 +77,7 @@ const ChatMessages = () => {
                                 content={msg}
                             />
                         ))}
+                        <div ref={messagesEndRef}></div>
                     </div>
                 </div>
             </div>
