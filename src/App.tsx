@@ -7,11 +7,15 @@ import {
 } from "react-router-dom";
 import { ChatPage, Loading, LoginPage } from "./pages";
 import { supabaseClient } from "./supabase/supabaseClient";
+import { useDispatch } from "react-redux";
+import { setUserData } from "./context/slices/userSlice";
 
 const App = () => {
   const [session, setSession] = useState<any>(null);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getSession = async () => {
@@ -21,6 +25,7 @@ const App = () => {
       } else {
         setSession(session);
         setUser(session?.user?.user_metadata || null);
+        dispatch(setUserData(session?.user));
       }
       setLoading(false);
     };
@@ -31,6 +36,7 @@ const App = () => {
       (_event, session) => {
         setSession(session);
         setUser(session?.user?.user_metadata || null);
+        dispatch(setUserData(session?.user));
       }
     );
 
