@@ -6,7 +6,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { ChatPage, Loading, LoginPage } from "./pages";
-import { supabase } from "./supabase";
+import { supabase } from "./supabase/supabaseClient";
 
 const App = () => {
   const [session, setSession] = useState<any>(null);

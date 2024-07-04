@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import User from "./utils/User";
-import { supabaseAdmin } from "../supabase";
+import { supabaseAdmin } from "../supabase/supabaseAdmin";
 
 const Chatlist = () => {
     const [users, setUsers] = useState<any[]>([]);
