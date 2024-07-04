@@ -1,13 +1,25 @@
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { TextContent, VoiceContent } from "./utils";
 import { Loading } from "../pages";
 import { supabaseClient } from "../supabase/supabaseClient";
+import { useSelector } from "react-redux";
+import { RootState } from "../context/store";
 
 const ChatMessages = () => {
+    const [messages, setMessages] = useState<any[]>([]);
+    const { id } = useSelector((state: RootState) => state.user.userData);
+
     useEffect(() => {
         const getMessages = async () => {
-            const { data } = await supabaseClient.from("messages").select("*");
-            console.log("DATA :", data);
+            try {
+                const { data, error } = await supabaseClient.from("messages").select("*");
+                if (error) {
+                    throw new Error("Error fetching messages");
+                }
+                setMessages(data);
+            } catch (error) {
+                console.error("Error fetching messages:", error);
+            }
         };
         getMessages();
     }, []);
@@ -17,8 +29,9 @@ const ChatMessages = () => {
             <div className="flex flex-col h-full overflow-x-auto mb-4">
                 <div className="flex flex-col h-full">
                     <div className="grid grid-cols-12 gap-y-2">
-                        <TextContent currentUser={false} />
-                        <TextContent currentUser={true} />
+                        {messages.map((msg: any) => (
+                            <TextContent key={msg.id} currentUser={msg.from === id} content={msg} />
+                        ))}
                         <VoiceContent />
                     </div>
                 </div>
