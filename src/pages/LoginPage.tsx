@@ -1,35 +1,28 @@
+import { Auth } from "@supabase/auth-ui-react";
+import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "../supabase";
+
 const LoginPage = () => {
-
-    const signInWithGoogle = async () => {
-        const { error } = await supabase.auth.signInWithOAuth({
-            provider: 'google',
-        });
-        if (error) console.error("Error signing in with Google: ", error.message);
-    };
-
     return (
-        <div className="container flex flex-col mx-auto bg-white rounded-lg pt-12 my-5">
+        <div
+            className="min-h-screen flex items-center justify-center"
+            style={{
+                backgroundImage:
+                    "url(https://4kwallpapers.com/images/wallpapers/dark-background-abstract-background-network-3d-background-2560x1440-8324.png)",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+            }}
+        >
             <div className="flex justify-center w-full h-full my-auto xl:gap-14 lg:justify-normal md:gap-5 draggable">
                 <div className="flex items-center justify-center w-full lg:p-12">
                     <div className="flex items-center xl:p-10">
-                        <form className="flex flex-col w-full h-full pb-6 text-center bg-white rounded-3xl">
-                            <h3 className="mb-3 text-4xl font-extrabold text-dark-grey-900">
-                                Sign In
-                            </h3>
-                            <button
-                                type="button"
-                                onClick={signInWithGoogle}
-                                className="flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl text-grey-900 bg-grey-300 hover:bg-grey-400 focus:ring-4 focus:ring-grey-300"
-                            >
-                                <img
-                                    className="h-5 mr-2"
-                                    src="https://raw.githubusercontent.com/Loopple/loopple-public-assets/main/motion-tailwind/img/logos/logo-google.png"
-                                    alt="Google Logo"
-                                />
-                                Sign in with Google
-                            </button>
-                        </form>
+                        <Auth
+                            supabaseClient={supabase}
+                            providers={["google"]}
+                            appearance={{ theme: ThemeSupa }}
+                            onlyThirdPartyProviders={true}
+                        />
                     </div>
                 </div>
             </div>
