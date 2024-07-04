@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useState } from "react";
-import { TextContent, VoiceContent } from "./utils";
+import { TextContent } from "./utils";
 import { Loading } from "../pages";
 import { supabaseClient } from "../supabase/supabaseClient";
 import { useSelector } from "react-redux";
@@ -12,9 +12,7 @@ const ChatMessages = () => {
 
     const getMessages = async () => {
         try {
-            const { data, error } = await supabaseClient
-                .from("messages")
-                .select("*");
+            const { data, error } = await supabaseClient.from("messages").select("*");
 
             if (error) throw new Error("Error fetching messages");
 
@@ -41,15 +39,21 @@ const ChatMessages = () => {
     useEffect(() => {
         const channel = supabaseClient
             .channel("chat-room")
-            .on("postgres_changes", { event: "INSERT", table: "messages", }, (payload: any) => {
-                console.log(payload)
-                // getMessages();
-            }).subscribe();
+            .on(
+                'postgres_changes',
+                { event: "INSERT", table: "messages" },
+                (payload: any) => {
+                    let message = payload?.new;
+                    const sentBy = users[payload?.new?.from]?.user_metadata;
+                    message.user = sentBy;
+                    setMessages((prevMessages) => [...prevMessages, message]);
+                }
+            )
+            .subscribe();
 
         return () => {
             channel.unsubscribe();
-        }
-
+        };
     }, []);
 
     return (
@@ -64,7 +68,6 @@ const ChatMessages = () => {
                                 content={msg}
                             />
                         ))}
-                        {/* <VoiceContent /> */}
                     </div>
                 </div>
             </div>
