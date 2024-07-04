@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import User from "./utils/User";
 import { supabaseAdmin } from "../supabase/supabaseAdmin";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../context/store";
+import { setUsersData } from "../context/slices/userSlice";
 
 const Chatlist = () => {
     const [users, setUsers] = useState<any[]>([]);
     const [error, setError] = useState<string | null>(null);
-
+    const dispatch = useDispatch();
     const userData = useSelector((state: RootState) => state.user.userData);
 
     useEffect(() => {
@@ -18,6 +19,7 @@ const Chatlist = () => {
                     setError(apiError.message);
                     return;
                 }
+                dispatch(setUsersData(data.users));
                 setUsers(data.users.filter((user: any) => user.id !== userData?.id));
             } catch (err) {
                 console.error("Error fetching users:", err);

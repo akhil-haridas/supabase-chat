@@ -8,21 +8,35 @@ import { RootState } from "../context/store";
 const ChatMessages = () => {
     const [messages, setMessages] = useState<any[]>([]);
     const { id } = useSelector((state: RootState) => state.user.userData);
+    const users = useSelector((state: RootState) => state.user.usersData);
 
     useEffect(() => {
         const getMessages = async () => {
             try {
-                const { data, error } = await supabaseClient.from("messages").select("*");
-                if (error) {
-                    throw new Error("Error fetching messages");
-                }
-                setMessages(data);
+                const { data, error } = await supabaseClient
+                    .from("messages")
+                    .select("*");
+
+                if (error) throw new Error("Error fetching messages");
+
+                const userMap = users.reduce((map: any, user: any) => {
+                    map[user.id] = user;
+                    return map;
+                }, {});
+
+                const messagesWithUsers = data.map((msg: any) => ({
+                    ...msg,
+                    user: userMap[msg.from],
+                }));
+
+                setMessages(messagesWithUsers);
             } catch (error) {
                 console.error("Error fetching messages:", error);
             }
         };
+
         getMessages();
-    }, []);
+    }, [users]);
 
     return (
         <Suspense fallback={<Loading />}>
@@ -30,7 +44,11 @@ const ChatMessages = () => {
                 <div className="flex flex-col h-full">
                     <div className="grid grid-cols-12 gap-y-2">
                         {messages.map((msg: any) => (
-                            <TextContent key={msg.id} currentUser={msg.from === id} content={msg} />
+                            <TextContent
+                                key={msg.id}
+                                currentUser={msg.from === id}
+                                content={msg}
+                            />
                         ))}
                         <VoiceContent />
                     </div>

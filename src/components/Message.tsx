@@ -6,10 +6,7 @@ const Message = () => {
 
     const sendMessage = async (e: any) => {
         e.preventDefault();
-        console.log("MESSAGE ::", message);
-
         const { error } = await supabaseClient.from("messages").insert({ message });
-
         if (error) console.log("error:", error);
     };
 

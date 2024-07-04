@@ -1,6 +1,16 @@
 import React from "react";
 
-const Content = ({ currentUser = false }) => {
+interface ContentProps {
+    currentUser: boolean;
+    content: {
+        message: string;
+        created_at: string;
+    };
+}
+
+const Content: React.FC<ContentProps> = ({ currentUser, content }) => {
+    console.log(content);
+
     return (
         <>
             {currentUser ? (
@@ -10,7 +20,7 @@ const Content = ({ currentUser = false }) => {
                             A
                         </div>
                         <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
-                            <div>Lorem ipsum dolor sit, amet consectetur adipisicing. ?</div>
+                            <div>{content.message}</div>
                             <div className="absolute text-xs bottom-0  -mb-5 mr-2 text-gray-500">
                                 10.00pm
                             </div>
@@ -27,10 +37,7 @@ const Content = ({ currentUser = false }) => {
                             A
                         </div>
                         <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
-                            <div>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Perspiciatis, in.
-                            </div>
+                            <div>{content.message}</div>
                             <div className="absolute text-xs bottom-0  -mb-5 mr-2 text-gray-500">
                                 10.00pm
                             </div>
