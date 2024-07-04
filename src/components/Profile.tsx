@@ -24,11 +24,11 @@ const Profile: React.FC<ProfileProps> = ({ user }) => {
             <div className="text-sm font-semibold mt-2">{user.name}</div>
             <div className="text-xs text-gray-500">{user.email}</div>
             <div className="flex flex-row items-center mt-3">
-                <div className="flex flex-col justify-center h-4 w-8 bg-indigo-500 rounded-full">
+                <div className="flex flex-col justify-center h-4 w-8 bg-indigo-500 rounded-full cursor-pointer" onClick={handleSignoutUser}>
                     <div className="h-3 w-3 bg-white rounded-full self-end mr-1"></div>
                 </div>
-                <div className="leading-none ml-1 text-xs" onClick={handleSignoutUser}>
-                    Active
+                <div className="leading-none ml-1 text-xs">
+                    Logout
                 </div>
             </div>
         </div>
