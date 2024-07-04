@@ -1,5 +1,5 @@
 import React from "react";
-import { supabase } from "../supabase/supabaseClient";
+import { supabaseClient } from "../supabase/supabaseClient";
 
 interface ProfileProps {
     user: {
@@ -12,7 +12,7 @@ interface ProfileProps {
 const Profile: React.FC<ProfileProps> = ({ user }) => {
     const handleSignoutUser = async (e: any) => {
         e.preventDefault();
-        const { error } = await supabase.auth.signOut();
+        const { error } = await supabaseClient.auth.signOut();
         console.log(error);
     };
 

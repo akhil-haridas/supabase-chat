@@ -6,7 +6,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { ChatPage, Loading, LoginPage } from "./pages";
-import { supabase } from "./supabase/supabaseClient";
+import { supabaseClient } from "./supabase/supabaseClient";
 
 const App = () => {
   const [session, setSession] = useState<any>(null);
@@ -15,7 +15,7 @@ const App = () => {
 
   useEffect(() => {
     const getSession = async () => {
-      const { data: { session }, error } = await supabase.auth.getSession();
+      const { data: { session }, error } = await supabaseClient.auth.getSession();
       if (error) {
         console.error("Error fetching session:", error);
       } else {
@@ -27,7 +27,7 @@ const App = () => {
 
     getSession();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+    const { data: { subscription } } = supabaseClient.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session);
         setUser(session?.user?.user_metadata || null);

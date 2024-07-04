@@ -1,6 +1,6 @@
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { supabase } from "../supabase/supabaseClient";
+import { supabaseClient } from "../supabase/supabaseClient";
 
 const LoginPage = () => {
     return (
@@ -18,7 +18,7 @@ const LoginPage = () => {
                 <div className="flex items-center justify-center w-full lg:p-12">
                     <div className="flex items-center xl:p-10">
                         <Auth
-                            supabaseClient={supabase}
+                            supabaseClient={supabaseClient}
                             providers={["google"]}
                             appearance={{ theme: ThemeSupa }}
                             onlyThirdPartyProviders={true}
