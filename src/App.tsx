@@ -15,45 +15,24 @@ const App = () => {
 
   useEffect(() => {
     const getSession = async () => {
-      const {
-        data: { session },
-        error: sessionError,
-      } = await supabase.auth.getSession();
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
-
-      if (sessionError || userError) {
-        console.error(
-          "Error fetching session or user:",
-          sessionError || userError
-        );
-        setLoading(false);
-        return;
-      }
-
-      setSession(session);
-      if (session) {
-        setUser(session?.user?.user_metadata);
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error("Error fetching session:", error);
       } else {
-        setUser(user?.user_metadata);
+        setSession(session);
+        setUser(session?.user?.user_metadata || null);
       }
       setLoading(false);
     };
 
     getSession();
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      if (session) {
-        setUser(session?.user?.user_metadata);
-      } else {
-        setUser(null);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setSession(session);
+        setUser(session?.user?.user_metadata || null);
       }
-    });
+    );
 
     return () => subscription.unsubscribe();
   }, []);
