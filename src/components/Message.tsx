@@ -1,14 +1,22 @@
-import React from 'react'
+import { useState } from "react";
+import { supabaseClient } from "../supabase/supabaseClient";
 
 const Message = () => {
+    const [message, setMessage] = useState("");
+
+    const sendMessage = async (e: any) => {
+        e.preventDefault();
+        console.log("MESSAGE ::", message);
+
+        const { error } = await supabaseClient.from("messages").insert({ message });
+
+        if (error) console.log("error:", error);
+    };
+
     return (
-        <div
-            className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4"
-        >
+        <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
             <div>
-                <button
-                    className="flex items-center justify-center text-gray-400 hover:text-gray-600"
-                >
+                <button className="flex items-center justify-center text-gray-400 hover:text-gray-600">
                     <svg
                         className="w-5 h-5"
                         fill="none"
@@ -30,10 +38,10 @@ const Message = () => {
                     <input
                         type="text"
                         className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
                     />
-                    <button
-                        className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600"
-                    >
+                    <button className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600">
                         <svg
                             className="w-6 h-6"
                             fill="none"
@@ -54,6 +62,8 @@ const Message = () => {
             <div className="ml-4">
                 <button
                     className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1 flex-shrink-0"
+                    type="button"
+                    onClick={sendMessage}
                 >
                     <span>Send</span>
                     <span className="ml-2">
@@ -75,7 +85,7 @@ const Message = () => {
                 </button>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Message
+export default Message;
