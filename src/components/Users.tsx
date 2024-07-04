@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import User from "./utils/User";
-import { supabase } from "../supabase";
+import { supabaseAdmin } from "../supabase";
 
 const Chatlist = () => {
     const [users, setUsers] = useState<any[]>([]);
@@ -9,7 +9,7 @@ const Chatlist = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const { data, error: apiError } = await supabase.auth.admin.listUsers();
+                const { data, error: apiError } = await supabaseAdmin.auth.admin.listUsers();
                 if (apiError) {
                     setError(apiError.message);
                     return;
@@ -23,7 +23,6 @@ const Chatlist = () => {
 
         fetchUsers();
     }, []);
-    
     return (
         <div className="flex flex-col mt-8 max-h-70">
             <div className="flex flex-row items-center justify-between text-xs">
