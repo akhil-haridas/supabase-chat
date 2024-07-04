@@ -26,7 +26,7 @@ const ChatMessages = () => {
 
                 const messagesWithUsers = data.map((msg: any) => ({
                     ...msg,
-                    user: userMap[msg.from],
+                    user: userMap[msg.from]?.user_metadata,
                 }));
 
                 setMessages(messagesWithUsers);
