@@ -41,7 +41,7 @@ const Content: React.FC<ContentProps> = ({ currentUser, content }) => {
                         </div>
 
                         <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
-                            <div className="absolute text-xs -top-1 right-0 -mt-4 font-bold mr-2 text-gray-500">
+                            <div className="absolute text-xs -top-1 right-0 min-w-41 -mt-4 font-bold mr-2 text-gray-500">
                                 {content?.user?.name}
                             </div>
                             <div>{content.message}</div>
@@ -66,7 +66,7 @@ const Content: React.FC<ContentProps> = ({ currentUser, content }) => {
                             )}
                         </div>
                         <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
-                            <div className="absolute text-xs -top-1 left-0 -mt-4 font-bold mr-2 text-gray-500">
+                            <div className="absolute text-xs -top-1 left-0 min-w-41 -mt-4 font-bold mr-2 text-gray-500">
                                 {content?.user?.name}
                             </div>
                             <div>{content.message}</div>
