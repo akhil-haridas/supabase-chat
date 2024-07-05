@@ -6,8 +6,14 @@ const Message = () => {
 
     const sendMessage = async (e: any) => {
         e.preventDefault();
+        if (message.trim() === "") return;
         const { error } = await supabaseClient.from("messages").insert({ message });
+        setMessage("");
         if (error) console.log("error:", error);
+    };
+
+    const handleKeyDown = async (e: any) => {
+        if (e.key === "Enter") await sendMessage(e)
     };
 
     return (
@@ -37,6 +43,7 @@ const Message = () => {
                         className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
+                        onKeyDown={handleKeyDown}
                     />
                     <button className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600">
                         <svg
