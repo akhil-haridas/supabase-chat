@@ -61,7 +61,6 @@ const ChatMessages = () => {
                 'postgres_changes',
                 { event: "INSERT", schema: "public", table: 'messages' },
                 async (payload: any) => {
-                    console.log("123123")
                     let message = payload?.new;
                     const sentBy = await getUserById(payload?.new?.from);
                     message.user = sentBy?.user_metadata;
