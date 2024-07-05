@@ -30,7 +30,7 @@ const Message = () => {
             await sendMessage(e);
         } else {
             setIsTyping(true);
-            setTimeout(() => setIsTyping(false), 3000);
+            setTimeout(() => setIsTyping(false), 1000);
         }
     };
 
