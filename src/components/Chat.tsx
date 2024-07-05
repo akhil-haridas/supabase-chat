@@ -76,7 +76,7 @@ const ChatMessages = () => {
 
     useEffect(() => {
         scrollToBottom();
-    }, [messages]);
+    }, [messages, typingUsers]);
 
     useEffect(() => {
         const channel = supabaseClient
@@ -86,15 +86,18 @@ const ChatMessages = () => {
                 { event: "*", schema: "public", table: "typing" },
                 async (payload: any) => {
                     if (payload.new.user_id !== id) {
-                        let user = await getUserById(payload?.new?.user_id);
-                        user.user_metadata.isTyping = payload?.new?.is_typing
-                        setTypingUsers((prevTypingUsers: any) => {
+                        const user = await getUserById(payload?.new?.user_id);
+                        setTypingUsers((prevTypingUsers: any[]) => {
+                            const newTypingUsers = new Set(prevTypingUsers.map((u) => u.id));
+
                             if (payload?.new?.is_typing) {
-                                return [...prevTypingUsers, user.user_metadata];
+                                if (!newTypingUsers.has(user.id)) {
+                                    return [...prevTypingUsers, user];
+                                }
                             } else {
                                 return prevTypingUsers.filter((preUser: any) => preUser.id !== user.id);
                             }
-                        })
+                        });
                     }
                 }
             )
@@ -118,7 +121,7 @@ const ChatMessages = () => {
                             />
                         ))}
                         {typingUsers?.length > 0 && typingUsers.map((user: any) => (
-                            <Typing key={user.id} user={user} />
+                            <Typing key={user.id} user={user?.user_metadata} />
                         ))}
                         <div ref={messagesEndRef}></div>
                     </div>
