@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useState, useRef } from "react";
-import { TextContent } from "./utils";
+import { TextContent, Typing } from "./utils";
 import { Loading } from "../pages";
 import { supabaseClient } from "../supabase/supabaseClient";
 import { useSelector } from "react-redux";
@@ -8,6 +8,8 @@ import { supabaseAdmin } from "../supabase/supabaseAdmin";
 
 const ChatMessages = () => {
     const [messages, setMessages] = useState<any[]>([]);
+    const [typingUsers, setTypingUsers] = useState<any>([]);
+
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const { id } = useSelector((state: RootState) => state.user.userData);
     const users = useSelector((state: RootState) => state.user.usersData);
@@ -76,6 +78,34 @@ const ChatMessages = () => {
         scrollToBottom();
     }, [messages]);
 
+    useEffect(() => {
+        const channel = supabaseClient
+            .channel("chat-room")
+            .on(
+                "postgres_changes",
+                { event: "*", schema: "public", table: "typing" },
+                async (payload: any) => {
+                    console.log("payload::", payload);
+                    console.log(id)
+                    if (payload.new.user_id !== id) {
+                        const user = await getUserById(payload?.new?.user_id);
+                        setTypingUsers((prevTypingUsers: any) => {
+                            if (payload?.new?.is_typing) {
+                                return [...prevTypingUsers, user];
+                            } else {
+                                return prevTypingUsers.filter((preUser: any) => preUser.id !== user.id);
+                            }
+                        })
+                    }
+                }
+            )
+            .subscribe();
+
+        return () => {
+            channel.unsubscribe();
+        };
+    }, []);
+
     return (
         <Suspense fallback={<Loading />}>
             <div className="flex flex-col h-full overflow-x-auto mb-4">
@@ -87,6 +117,9 @@ const ChatMessages = () => {
                                 currentUser={msg.from === id}
                                 content={msg}
                             />
+                        ))}
+                        {typingUsers?.length > 0 && typingUsers.map((user: any) => (
+                            <Typing user={user}
                         ))}
                         <div ref={messagesEndRef}></div>
                     </div>

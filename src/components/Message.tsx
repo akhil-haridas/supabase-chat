@@ -4,14 +4,11 @@ import { supabaseClient } from "../supabase/supabaseClient";
 import Picker from "@emoji-mart/react";
 import { useSelector } from "react-redux";
 import { RootState } from "../context/store";
-import { supabaseAdmin } from "../supabase/supabaseAdmin";
 
 const Message = () => {
     const [message, setMessage] = useState("");
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
-    const [typingUsers, setTypingUsers] = useState<any>([]);
-
     const { id } = useSelector((state: RootState) => state.user.userData);
 
     const sendMessage = async (e: any) => {
@@ -70,38 +67,6 @@ const Message = () => {
 
         updateTypingStatus();
     }, [isTyping]);
-
-    const getUserById = async (userId: string): Promise<any> => {
-        try {
-            const {
-                data: { user },
-                error,
-            } = await supabaseAdmin.auth.admin.getUserById(userId);
-            if (error) throw new Error("Error fetching user");
-            return user;
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    useEffect(() => {
-        const channel = supabaseClient
-            .channel("chat-room")
-            .on(
-                "postgres_changes",
-                { event: "*", schema: "public", table: "typing" },
-                async (payload: any) => {
-                    console.log("payload::", payload);
-                    // let message = payload?.new;
-                    // const sentBy = await getUserById(payload?.new?.user_id);
-                }
-            )
-            .subscribe();
-
-        return () => {
-            channel.unsubscribe();
-        };
-    }, []);
 
     return (
         <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
