@@ -17,9 +17,9 @@ const User: React.FC<UserProps> = ({ user }) => {
                     className="h-full w-full rounded-full"
                 />
             </div>
-            <div className="ml-2 text-sm font-semibold">{user.name}</div>
-            <div className="flex items-center justify-center ml-auto text-xs text-white bg-red-500 h-4 w-4 rounded leading-none">
-                {true && 2}
+            <div className="ml-2 text-sm font-semibold overflow-hidden text-ellipsis whitespace-nowrap text-left w-36">{user.name}</div>
+            <div className="flex items-center justify-center ml-auto text-xs text-white bg-green-500 hover:bg-green-700 h-3 w-3 rounded-full leading-none">
+                {/* {true && 2} */}
             </div>
         </button>
     );

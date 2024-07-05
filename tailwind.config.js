@@ -7,10 +7,11 @@ export default {
   theme: {
     extend: {
       maxHeight: {
-        '70': '70%',  // Custom max-height value
+        '70': '70%',
       },
       minWidth: {
-        '41': '41px',  // Custom max-height value
+        '41': '41px',
+        '500': '500px',
       },
     },
   },
