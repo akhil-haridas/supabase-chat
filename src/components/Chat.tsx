@@ -61,6 +61,7 @@ const ChatMessages = () => {
                 'postgres_changes',
                 { event: "INSERT", schema: "public", table: 'messages' },
                 async (payload: any) => {
+                    console.log("123123")
                     let message = payload?.new;
                     const sentBy = await getUserById(payload?.new?.from);
                     message.user = sentBy?.user_metadata;
@@ -76,11 +77,11 @@ const ChatMessages = () => {
 
     useEffect(() => {
         scrollToBottom();
-    }, [messages, typingUsers]);
+    }, [messages]);
 
     useEffect(() => {
         const channel = supabaseClient
-            .channel("chat-room")
+            .channel("chat-room1")
             .on(
                 "postgres_changes",
                 { event: "*", schema: "public", table: "typing" },
@@ -98,6 +99,7 @@ const ChatMessages = () => {
                                 return prevTypingUsers.filter((preUser: any) => preUser.id !== user.id);
                             }
                         });
+                        scrollToBottom();
                     }
                 }
             )
