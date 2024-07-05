@@ -1,6 +1,15 @@
 import React from 'react'
 
-const Typing = ({ user }) => {
+interface UserProps {
+    user: {
+        name: string;
+        picture: string;
+        message:string;
+    };
+}
+
+const Typing: React.FC<UserProps> =  ({ user }) => {
+    console.log("USER ::",user)
     return (
         <div className="col-start-1 col-end-8 p-6 rounded-lg">
             <div className="flex flex-row items-center">

@@ -91,7 +91,7 @@ const ChatMessages = () => {
                         const user = await getUserById(payload?.new?.user_id);
                         setTypingUsers((prevTypingUsers: any) => {
                             if (payload?.new?.is_typing) {
-                                return [...prevTypingUsers, user];
+                                return [...prevTypingUsers, user.user_metadata];
                             } else {
                                 return prevTypingUsers.filter((preUser: any) => preUser.id !== user.id);
                             }
@@ -119,7 +119,7 @@ const ChatMessages = () => {
                             />
                         ))}
                         {typingUsers?.length > 0 && typingUsers.map((user: any) => (
-                            <Typing user={user}
+                            <Typing key={user.id} user={user} />
                         ))}
                         <div ref={messagesEndRef}></div>
                     </div>
