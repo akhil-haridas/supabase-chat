@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { supabaseClient } from "../supabase/supabaseClient";
 
+import Picker from "@emoji-mart/react";
+
 const Message = () => {
     const [message, setMessage] = useState("");
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
     const sendMessage = async (e: any) => {
         e.preventDefault();
@@ -13,7 +16,12 @@ const Message = () => {
     };
 
     const handleKeyDown = async (e: any) => {
-        if (e.key === "Enter") await sendMessage(e)
+        if (e.key === "Enter") await sendMessage(e);
+    };
+
+    const handleEmojiSelect = (emoji: any) => {
+        setMessage((prevMessage) => prevMessage + emoji.native);
+        setShowEmojiPicker(false);
     };
 
     return (
@@ -45,7 +53,10 @@ const Message = () => {
                         onChange={(e) => setMessage(e.target.value)}
                         onKeyDown={handleKeyDown}
                     />
-                    <button className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600">
+                    <button
+                        className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600"
+                        onClick={() => setShowEmojiPicker((prev) => !prev)}
+                    >
                         <svg
                             className="w-6 h-6"
                             fill="none"
@@ -61,6 +72,11 @@ const Message = () => {
                             ></path>
                         </svg>
                     </button>
+                    {showEmojiPicker && (
+                        <div className="absolute z-10 bottom-full right-0 mb-4">
+                            <Picker onEmojiSelect={handleEmojiSelect} previewPosition='none' />
+                        </div>
+                    )}
                 </div>
             </div>
             <div className="ml-4">
