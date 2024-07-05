@@ -57,7 +57,7 @@ const ChatMessages = () => {
             .channel("chat-room")
             .on(
                 'postgres_changes',
-                { event: "INSERT", table: "messages" },
+                { event: "INSERT", schema: "public", table: 'messages' },
                 async (payload: any) => {
                     let message = payload?.new;
                     const sentBy = await getUserById(payload?.new?.from);
