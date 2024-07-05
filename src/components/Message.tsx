@@ -1,28 +1,107 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabaseClient } from "../supabase/supabaseClient";
 
 import Picker from "@emoji-mart/react";
+import { useSelector } from "react-redux";
+import { RootState } from "../context/store";
+import { supabaseAdmin } from "../supabase/supabaseAdmin";
 
 const Message = () => {
     const [message, setMessage] = useState("");
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const [isTyping, setIsTyping] = useState(false);
+    const [typingUsers, setTypingUsers] = useState<any>([]);
+
+    const { id } = useSelector((state: RootState) => state.user.userData);
 
     const sendMessage = async (e: any) => {
         e.preventDefault();
         if (message.trim() === "") return;
         const { error } = await supabaseClient.from("messages").insert({ message });
         setMessage("");
+        setIsTyping(false);
         if (error) console.log("error:", error);
-    };
-
-    const handleKeyDown = async (e: any) => {
-        if (e.key === "Enter") await sendMessage(e);
     };
 
     const handleEmojiSelect = (emoji: any) => {
         setMessage((prevMessage) => prevMessage + emoji.native);
         setShowEmojiPicker(false);
     };
+
+    const handleKeyDown = async (e: any) => {
+        if (e.key === "Enter") {
+            await sendMessage(e);
+        } else {
+            setIsTyping(true);
+            setTimeout(() => setIsTyping(false), 3000);
+        }
+    };
+
+    useEffect(() => {
+        const updateTypingStatus = async () => {
+            const { data, error } = await supabaseClient
+                .from("typing")
+                .select("*")
+                .eq("user_id", id)
+                .single();
+
+            if (error && error.code !== "PGRST116") {
+                console.error("Error fetching typing status:", error);
+                return;
+            }
+
+            if (data) {
+                const { error: updateError } = await supabaseClient
+                    .from("typing")
+                    .update({ is_typing: isTyping })
+                    .eq("user_id", id);
+
+                if (updateError)
+                    console.error("Error updating typing status:", updateError);
+            } else {
+                const { error: insertError } = await supabaseClient
+                    .from("typing")
+                    .insert({ user_id: id, is_typing: isTyping });
+
+                if (insertError)
+                    console.error("Error inserting typing status:", insertError);
+            }
+        };
+
+        updateTypingStatus();
+    }, [isTyping]);
+
+    const getUserById = async (userId: string): Promise<any> => {
+        try {
+            const {
+                data: { user },
+                error,
+            } = await supabaseAdmin.auth.admin.getUserById(userId);
+            if (error) throw new Error("Error fetching user");
+            return user;
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        const channel = supabaseClient
+            .channel("chat-room")
+            .on(
+                "postgres_changes",
+                { event: "*", schema: "public", table: "typing" },
+                async (payload: any) => {
+                    console.log("payload::", payload);
+                    // let message = payload?.new;
+                    // const sentBy = await getUserById(payload?.new?.user_id);
+                }
+            )
+            .subscribe();
+
+        return () => {
+            channel.unsubscribe();
+        };
+    }, []);
 
     return (
         <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
@@ -74,7 +153,10 @@ const Message = () => {
                     </button>
                     {showEmojiPicker && (
                         <div className="absolute z-10 bottom-full right-0 mb-4">
-                            <Picker onEmojiSelect={handleEmojiSelect} previewPosition='none' />
+                            <Picker
+                                onEmojiSelect={handleEmojiSelect}
+                                previewPosition="none"
+                            />
                         </div>
                     )}
                 </div>
