@@ -4,6 +4,7 @@ import { Loading } from "../pages";
 import { supabaseClient } from "../supabase/supabaseClient";
 import { useSelector } from "react-redux";
 import { RootState } from "../context/store";
+import { supabaseAdmin } from "../supabase/supabaseAdmin";
 
 const ChatMessages = () => {
     const [messages, setMessages] = useState<any[]>([]);
@@ -41,16 +42,26 @@ const ChatMessages = () => {
         getMessages();
     }, [users]);
 
+    const getUserById = async (userId: string): Promise<any> => {
+        try {
+            const { data: { user }, error } = await supabaseAdmin.auth.admin.getUserById(userId)
+            if (error) throw new Error("Error fetching user");
+            return user;
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         const channel = supabaseClient
             .channel("chat-room")
             .on(
                 'postgres_changes',
                 { event: "INSERT", table: "messages" },
-                (payload: any) => {
+                async (payload: any) => {
                     let message = payload?.new;
-                    const sentBy = users[payload?.new?.from]?.user_metadata;
-                    message.user = sentBy;
+                    const sentBy = await getUserById(payload?.new?.from);
+                    message.user = sentBy?.user_metadata;
                     setMessages((prevMessages) => [...prevMessages, message]);
                 }
             )
