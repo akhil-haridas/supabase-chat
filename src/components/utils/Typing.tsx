@@ -1,15 +1,8 @@
+import { faEllipsis } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 
-interface UserProps {
-    user: {
-        name: string;
-        picture: string;
-        message:string;
-    };
-}
-
-const Typing: React.FC<UserProps> =  ({ user }) => {
-    console.log("USER ::",user)
+const Typing: React.FC<any> =  ({ user }) => {
     return (
         <div className="col-start-1 col-end-8 p-6 rounded-lg">
             <div className="flex flex-row items-center">
@@ -21,14 +14,11 @@ const Typing: React.FC<UserProps> =  ({ user }) => {
                     />
 
                 </div>
-                <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
-                    <div className="absolute text-xs -top-1 left-0 min-w-500 -mt-4 font-bold mr-2 text-gray-500">
+                <div className="relative ml-3 text-sm bg-transparent py-2 px-4 rounded-xl">
+                    <div className="absolute text-xs -top-1 left-0 min-w-500 font-bold mr-2 text-gray-500">
                         {user?.name}
                     </div>
-                    <div>{user?.message}</div>
-                    <div className="absolute text-xs bottom-0 min-w-44  -mb-5 mr-2 text-gray-500">
-                        {/* {formatTime(new Date(content.created_at))} */}
-                    </div>
+                    <FontAwesomeIcon icon={faEllipsis} fade size="3x" />
                 </div>
             </div>
         </div>

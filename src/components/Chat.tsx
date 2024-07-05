@@ -85,10 +85,9 @@ const ChatMessages = () => {
                 "postgres_changes",
                 { event: "*", schema: "public", table: "typing" },
                 async (payload: any) => {
-                    console.log("payload::", payload);
-                    console.log(id)
                     if (payload.new.user_id !== id) {
-                        const user = await getUserById(payload?.new?.user_id);
+                        let user = await getUserById(payload?.new?.user_id);
+                        user.user_metadata.isTyping = payload?.new?.is_typing
                         setTypingUsers((prevTypingUsers: any) => {
                             if (payload?.new?.is_typing) {
                                 return [...prevTypingUsers, user.user_metadata];
