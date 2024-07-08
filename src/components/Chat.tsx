@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useState, useRef } from "react";
-import { FileUpload, TextContent, Typing } from "./utils";
+import { FileContent, FileUpload, TextContent, Typing } from "./utils";
 import { Loading } from "../pages";
 import { supabaseClient } from "../supabase/supabaseClient";
 import { useSelector } from "react-redux";
@@ -117,7 +117,10 @@ const ChatMessages = () => {
                     <div className="grid grid-cols-12 gap-y-2">
                         {messages.map((msg: any) =>
                             msg.is_file ? (
-                                <p>IMAGE</p>
+                                <FileContent
+                                    key={msg.id}
+                                    currentUser={msg.from === id}
+                                    content={msg} />
                             ) : (
                                 <TextContent
                                     key={msg.id}
@@ -126,7 +129,6 @@ const ChatMessages = () => {
                                 />
                             )
                         )}
-
                         {storedFile && <FileUpload file={storedFile} />}
                         {typingUsers?.length > 0 && typingUsers.map((user: any) => (
                             <Typing key={user.id} user={user?.user_metadata} />
