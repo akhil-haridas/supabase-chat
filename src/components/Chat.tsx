@@ -121,7 +121,7 @@ const ChatMessages = () => {
                                 content={msg}
                             />
                         ))}
-                        <FileUpload/>
+                        {/* <FileUpload/> */}
                         {typingUsers?.length > 0 && typingUsers.map((user: any) => (
                             <Typing key={user.id} user={user?.user_metadata} />
                         ))}
