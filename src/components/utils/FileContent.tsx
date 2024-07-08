@@ -29,12 +29,22 @@ const FileContent: React.FC<ContentProps> = ({ currentUser, content }) => {
     return (
         <>
             {currentUser ? (
-                <section className="col-start-9 col-end-13 p-3 rounded-lg">
-                    <div className="max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden items-center">
-                        <div className="px-4 py-6">
+                <div className="col-start-6 col-end-13 p-6 rounded-lg">
+                    <div className="flex items-center justify-start flex-row-reverse">
+                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
+                            <img
+                                src={content?.user?.picture}
+                                alt="A"
+                                className="h-full w-full rounded-full"
+                            />
+                        </div>
+                        <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
+                            <div className="absolute text-xs -top-1 right-0 min-w-500 flex justify-end -mt-4 font-bold mr-2 text-gray-500">
+                                {content?.user?.name}
+                            </div>
                             <div
                                 id="image-preview"
-                                className="max-w-sm p-6 mb-4 bg-gray-100 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer"
+                                className="max-w-sm p-6 bg-gray-100 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer"
                             >
                                 <img
                                     src={imageUrl}
@@ -43,32 +53,33 @@ const FileContent: React.FC<ContentProps> = ({ currentUser, content }) => {
                                     onClick={() => document.getElementById("upload")?.click()}
                                 />
                             </div>
-                            <div className="flex justify-between items-center bottom-0 min-w-44  -mb-3 mr-2 ">
-                                <div className="flex flex-row items-center justify-start gap-2 w-3/4">
-                                    <img
-                                        src={content?.user?.picture}
-                                        alt="A"
-                                        className="h-6 w-6 rounded-full"
-                                    />
-                                    <span className="text-xs text-gray-500 font-bold">
-                                        {content?.user?.name}
-                                    </span>
-                                </div>
-
-                                <span className="text-xs text-gray-500 w-1/4">
-                                    {formatTime(new Date(content.created_at))}
-                                </span>
+                            <div className="absolute text-xs bottom-0 min-w-44  -mb-5 mr-2 text-gray-500">
+                                {formatTime(new Date(content.created_at))}
                             </div>
                         </div>
                     </div>
-                </section>
+                </div>
             ) : (
-                <section className="col-start-1 col-end-5 p-3 rounded-lg">
-                    <div className="max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden items-center">
-                        <div className="px-4 py-6">
+                <div className="col-start-1 col-end-8 p-6 rounded-lg">
+                    <div className="flex flex-row items-center">
+                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
+                            {content?.user?.picture ? (
+                                <img
+                                    src={content?.user?.picture}
+                                    alt="A"
+                                    className="h-full w-full rounded-full"
+                                />
+                            ) : (
+                                "A"
+                            )}
+                        </div>
+                        <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
+                            <div className="absolute text-xs -top-1 left-0 min-w-500 -mt-4 font-bold mr-2 text-gray-500">
+                                {content?.user?.name}
+                            </div>
                             <div
                                 id="image-preview"
-                                className="max-w-sm p-6 mb-4 bg-gray-100 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer"
+                                className="max-w-sm p-6 bg-gray-100 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer"
                             >
                                 <img
                                     src={imageUrl}
@@ -77,25 +88,12 @@ const FileContent: React.FC<ContentProps> = ({ currentUser, content }) => {
                                     onClick={() => document.getElementById("upload")?.click()}
                                 />
                             </div>
-                            <div className="flex justify-between items-center bottom-0 min-w-44  -mb-3 mr-2 ">
-                                <div className="flex flex-row items-center justify-start gap-2 w-3/4">
-                                    <img
-                                        src={content?.user?.picture}
-                                        alt="A"
-                                        className="h-6 w-6 rounded-full"
-                                    />
-                                    <span className="text-xs text-gray-500 font-bold">
-                                        {content?.user?.name}
-                                    </span>
-                                </div>
-
-                                <span className="text-xs text-gray-500 w-1/4">
-                                    {formatTime(new Date(content.created_at))}
-                                </span>
+                            <div className="absolute text-xs bottom-0 min-w-44  -mb-5 mr-2 text-gray-500">
+                                {formatTime(new Date(content.created_at))}
                             </div>
                         </div>
                     </div>
-                </section>
+                </div>
             )}
         </>
     );
