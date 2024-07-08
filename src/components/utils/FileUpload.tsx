@@ -1,7 +1,7 @@
 
 const FileUpload = () => {
     return (
-        <section className="col-start-8 col-end-13 p-3 rounded-lg">
+        <section className="col-start-9 col-end-13 p-3 rounded-lg">
             <div className="max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden items-center">
                 <div className="px-4 py-6">
                     <div id="image-preview" className="max-w-sm p-6 mb-4 bg-gray-100 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer">

@@ -9,7 +9,7 @@ export interface UserState {
 const initialState: UserState = {
     userData: null,
     usersData: [],
-    file: {},
+    file: null,
 };
 
 const userSlice = createSlice({
