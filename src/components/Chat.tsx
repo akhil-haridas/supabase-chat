@@ -13,6 +13,7 @@ const ChatMessages = () => {
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const { id } = useSelector((state: RootState) => state.user.userData);
     const users = useSelector((state: RootState) => state.user.usersData);
+    const storedFile = useSelector((state: RootState) => state.user.file);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -76,7 +77,7 @@ const ChatMessages = () => {
 
     useEffect(() => {
         scrollToBottom();
-    }, [messages]);
+    }, [messages, storedFile]);
 
     useEffect(() => {
         const channel = supabaseClient
@@ -121,7 +122,7 @@ const ChatMessages = () => {
                                 content={msg}
                             />
                         ))}
-                        {/* <FileUpload/> */}
+                        {storedFile && <FileUpload file={storedFile} />}
                         {typingUsers?.length > 0 && typingUsers.map((user: any) => (
                             <Typing key={user.id} user={user?.user_metadata} />
                         ))}
