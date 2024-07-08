@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { supabaseClient } from "../supabase/supabaseClient";
 
 import Picker from "@emoji-mart/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../context/store";
+import { storeFile } from "../context/slices/userSlice";
 
 const Message = () => {
     const [message, setMessage] = useState("");
@@ -12,6 +13,7 @@ const Message = () => {
     const { id } = useSelector((state: RootState) => state.user.userData);
 
     const fileInputRef = useRef<any>(null);
+    const dispatch = useDispatch();
 
     const sendMessage = async (e: any) => {
         e.preventDefault();
@@ -44,7 +46,7 @@ const Message = () => {
         const file = event.target.files[0];
         if (file) {
             console.log('Selected file:', file);
-            // Handle the file upload process here
+            dispatch(storeFile(file));
         }
     };
 
