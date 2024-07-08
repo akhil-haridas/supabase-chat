@@ -111,7 +111,7 @@ const ChatMessages = () => {
 
     return (
         <Suspense fallback={<Loading />}>
-            <div className="flex flex-col h-full overflow-x-auto mb-4">
+            <div className="flex flex-col h-full overflow-x-hidden mb-4">
                 <div className="flex flex-col h-full">
                     <div className="grid grid-cols-12 gap-y-2">
                         {messages.map((msg: any) => (
