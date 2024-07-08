@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useState, useRef } from "react";
-import { TextContent, Typing } from "./utils";
+import { FileUpload, TextContent, Typing } from "./utils";
 import { Loading } from "../pages";
 import { supabaseClient } from "../supabase/supabaseClient";
 import { useSelector } from "react-redux";
@@ -121,6 +121,7 @@ const ChatMessages = () => {
                                 content={msg}
                             />
                         ))}
+                        <FileUpload/>
                         {typingUsers?.length > 0 && typingUsers.map((user: any) => (
                             <Typing key={user.id} user={user?.user_metadata} />
                         ))}
