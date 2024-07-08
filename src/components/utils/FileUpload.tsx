@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { storeFile } from "../../context/slices/userSlice";
 import { useDispatch } from "react-redux";
+import { supabaseClient } from "../../supabase/supabaseClient";
 
 const FileUpload: React.FC<any> = ({ file }) => {
-    const [uploadFile, setUploadFile] = useState<File | null>(file);
+    const [uploadFile, setUploadFile] = useState<any>(file);
     const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
 
     const dispatch = useDispatch();
@@ -11,7 +12,7 @@ const FileUpload: React.FC<any> = ({ file }) => {
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = event.target.files ? event.target.files[0] : null;
         setUploadFile(selectedFile);
-        dispatch(storeFile(file));
+        dispatch(storeFile(selectedFile));
         if (selectedFile) {
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -35,7 +36,25 @@ const FileUpload: React.FC<any> = ({ file }) => {
         dispatch(storeFile(null));
     };
 
-    console.log(file);
+    const handleFileUpload = async () => {
+        if (!uploadFile) return;
+
+        const fileExt = uploadFile.name.split(".").pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { data, error } = await supabaseClient.storage.from("supabase-chat").upload(filePath, uploadFile);
+        if (error) console.log(error, data);
+
+        const { data: url } = await supabaseClient.storage.from("supabase-chat").getPublicUrl(filePath);
+        await sendMessage(url)
+    }
+
+    const sendMessage = async (imageUrl: any) => {
+        const { error } = await supabaseClient.from("messages").insert({ message: imageUrl, is_file: true });
+        if (error) console.log("error:", error);
+    };
+
     return (
         <section className="col-start-9 col-end-13 p-3 rounded-lg">
             <div className="max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden items-center">
@@ -94,7 +113,8 @@ const FileUpload: React.FC<any> = ({ file }) => {
                     </div>
                     <div className="flex items-center justify-center gap-3">
                         <div className="w-3/4">
-                            <label className="w-full text-white bg-[#050708] hover:bg-[#050708]/90 focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-medium rounded-lg text-sm px-5 py-2.5 flex items-center justify-center mr-2 mb-2 cursor-pointer">
+                            <label className="w-full text-white bg-[#050708] hover:bg-[#050708]/90 focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-medium rounded-lg text-sm px-5 py-2.5 flex items-center justify-center mr-2 mb-2 cursor-pointer"
+                                onClick={handleFileUpload}>
                                 <span className="text-center ml-2">Upload</span>
                             </label>
                         </div>
