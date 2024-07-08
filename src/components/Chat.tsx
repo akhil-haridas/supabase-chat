@@ -115,13 +115,18 @@ const ChatMessages = () => {
             <div className="flex flex-col h-full overflow-x-hidden mb-4">
                 <div className="flex flex-col h-full">
                     <div className="grid grid-cols-12 gap-y-2">
-                        {messages.map((msg: any) => (
-                            <TextContent
-                                key={msg.id}
-                                currentUser={msg.from === id}
-                                content={msg}
-                            />
-                        ))}
+                        {messages.map((msg: any) =>
+                            msg.is_file ? (
+                                <p>IMAGE</p>
+                            ) : (
+                                <TextContent
+                                    key={msg.id}
+                                    currentUser={msg.from === id}
+                                    content={msg}
+                                />
+                            )
+                        )}
+
                         {storedFile && <FileUpload file={storedFile} />}
                         {typingUsers?.length > 0 && typingUsers.map((user: any) => (
                             <Typing key={user.id} user={user?.user_metadata} />

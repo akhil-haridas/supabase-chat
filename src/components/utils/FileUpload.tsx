@@ -53,6 +53,7 @@ const FileUpload: React.FC<any> = ({ file }) => {
     const sendMessage = async (imageUrl: any) => {
         const { error } = await supabaseClient.from("messages").insert({ message: imageUrl, is_file: true });
         if (error) console.log("error:", error);
+        handleCancelFileUpload();
     };
 
     return (

@@ -18,7 +18,7 @@ const Message = () => {
     const sendMessage = async (e: any) => {
         e.preventDefault();
         if (message.trim() === "") return;
-        const { error } = await supabaseClient.from("messages").insert({ message });
+        const { error } = await supabaseClient.from("messages").insert({ message, is_file: false });
         setMessage("");
         setIsTyping(false);
         if (error) console.log("error:", error);
