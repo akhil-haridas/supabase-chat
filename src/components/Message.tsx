@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabaseClient } from "../supabase/supabaseClient";
 
 import Picker from "@emoji-mart/react";
@@ -10,6 +10,8 @@ const Message = () => {
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
     const { id } = useSelector((state: RootState) => state.user.userData);
+
+    const fileInputRef = useRef<any>(null);
 
     const sendMessage = async (e: any) => {
         e.preventDefault();
@@ -31,6 +33,18 @@ const Message = () => {
         } else {
             setIsTyping(true);
             setTimeout(() => setIsTyping(false), 1000);
+        }
+    };
+
+    const handleButtonClick = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleFileChange = (event: any) => {
+        const file = event.target.files[0];
+        if (file) {
+            console.log('Selected file:', file);
+            // Handle the file upload process here
         }
     };
 
@@ -71,7 +85,7 @@ const Message = () => {
     return (
         <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
             <div>
-                <button className="flex items-center justify-center text-gray-400 hover:text-gray-600">
+                <button className="flex items-center justify-center text-gray-400 hover:text-gray-600" onClick={handleButtonClick}>
                     <svg
                         className="w-5 h-5"
                         fill="none"
@@ -87,6 +101,12 @@ const Message = () => {
                         ></path>
                     </svg>
                 </button>
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    className="hidden"
+                    onChange={handleFileChange}
+                />
             </div>
             <div className="flex-grow ml-4">
                 <div className="relative w-full">
