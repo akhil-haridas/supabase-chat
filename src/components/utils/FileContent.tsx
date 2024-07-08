@@ -38,7 +38,7 @@ const FileContent: React.FC<ContentProps> = ({ currentUser, content }) => {
                                 className="h-full w-full rounded-full"
                             />
                         </div>
-                        <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
+                        <div className="relative mr-3 text-sm bg-indigo-100 py-4 px-4 shadow rounded-xl">
                             <div className="absolute text-xs -top-1 right-0 min-w-500 flex justify-end -mt-4 font-bold mr-2 text-gray-500">
                                 {content?.user?.name}
                             </div>
@@ -50,7 +50,6 @@ const FileContent: React.FC<ContentProps> = ({ currentUser, content }) => {
                                     src={imageUrl}
                                     className="max-h-48 rounded-lg mx-auto"
                                     alt="Image preview"
-                                    onClick={() => document.getElementById("upload")?.click()}
                                 />
                             </div>
                             <div className="absolute text-xs bottom-0 min-w-44  -mb-5 mr-2 text-gray-500">
@@ -73,7 +72,7 @@ const FileContent: React.FC<ContentProps> = ({ currentUser, content }) => {
                                 "A"
                             )}
                         </div>
-                        <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
+                        <div className="relative ml-3 text-sm bg-white py-4 px-4 shadow rounded-xl">
                             <div className="absolute text-xs -top-1 left-0 min-w-500 -mt-4 font-bold mr-2 text-gray-500">
                                 {content?.user?.name}
                             </div>
@@ -85,7 +84,6 @@ const FileContent: React.FC<ContentProps> = ({ currentUser, content }) => {
                                     src={imageUrl}
                                     className="max-h-48 rounded-lg mx-auto"
                                     alt="Image preview"
-                                    onClick={() => document.getElementById("upload")?.click()}
                                 />
                             </div>
                             <div className="absolute text-xs bottom-0 min-w-44  -mb-5 mr-2 text-gray-500">
