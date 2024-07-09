@@ -33,7 +33,7 @@ const FileContent: React.FC<ContentProps> = ({ currentUser, content }) => {
     const MessageBubble = ({ children, user, createdAt }: any) => (
         <div className={`relative text-sm ${currentUser ? "mr-3 bg-indigo-100" : 'ml-3 bg-white'} py-4 px-4 shadow rounded-xl`}>
             <div className={`absolute text-xs -top-1 ${currentUser ? "right-0 flex justify-end" : 'left-0'} min-w-500 -mt-4 font-bold mr-2 text-gray-500`}>
-                {user?.name}
+                {currentUser ? "You" : user?.name}
             </div>
             {children}
             <div className={`absolute text-xs bottom-0 ${currentUser ? "right-0 flex justify-end" : 'left-0'} min-w-44 -mb-5 mr-2 text-gray-500`}>

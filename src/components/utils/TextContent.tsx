@@ -41,7 +41,7 @@ const Content: React.FC<ContentProps> = ({ currentUser, content }) => {
 
                         <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
                             <div className="absolute text-xs -top-1 right-0 min-w-500 flex justify-end -mt-4 font-bold mr-2 text-gray-500">
-                                {content?.user?.name}
+                                You
                             </div>
                             <div>{content.message}</div>
                             <div className="absolute text-xs bottom-0 min-w-44  -mb-5 mr-2 text-gray-500">
