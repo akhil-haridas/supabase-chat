@@ -48,7 +48,7 @@ const FileContent: React.FC<ContentProps> = ({ currentUser, content }) => {
     const ImagePreview = ({ url }: { url: string }) => (
         <div
             id="image-preview"
-            className="max-w-sm p-6 bg-gray-100 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer"
+            className="max-w-sm bg-gray-10 rounded-lg items-center mx-auto"
         >
             <img src={url} className="max-h-48 rounded-lg mx-auto" alt="Image preview" />
         </div>
