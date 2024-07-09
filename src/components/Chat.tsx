@@ -1,10 +1,11 @@
-import { Suspense, useEffect, useState, useRef } from "react";
+import React, { Suspense, useEffect, useState, useRef } from "react";
 import { FileContent, FileUpload, TextContent, Typing } from "./utils";
 import { Loading } from "../pages";
 import { supabaseClient } from "../supabase/supabaseClient";
 import { useSelector } from "react-redux";
 import { RootState } from "../context/store";
 import { supabaseAdmin } from "../supabase/supabaseAdmin";
+import { format, isToday, isYesterday, parseISO } from 'date-fns';
 
 const ChatMessages = () => {
     const [messages, setMessages] = useState<any[]>([]);
@@ -110,25 +111,57 @@ const ChatMessages = () => {
         };
     }, []);
 
+    const groupMessagesByDate = (messages: any[]) => {
+        const groupedMessages: { [key: string]: any[] } = {};
+        messages.forEach((msg) => {
+            const date = format(parseISO(msg.created_at), 'yyyy-MM-dd');
+            if (!groupedMessages[date]) {
+                groupedMessages[date] = [];
+            }
+            groupedMessages[date].push(msg);
+        });
+        return groupedMessages;
+    };
+
+    const renderDateHeader = (date: string) => {
+        const parsedDate = parseISO(date);
+        if (isToday(parsedDate)) {
+            return "Today";
+        } else if (isYesterday(parsedDate)) {
+            return "Yesterday";
+        } else {
+            return format(parsedDate, 'MMMM dd, yyyy');
+        }
+    };
+
+    const groupedMessages = groupMessagesByDate(messages);
+
     return (
         <Suspense fallback={<Loading />}>
             <div className="flex flex-col h-full overflow-x-hidden mb-4">
                 <div className="flex flex-col h-full">
                     <div className="grid grid-cols-12 gap-y-2">
-                        {messages.map((msg: any) =>
-                            msg.is_file ? (
-                                <FileContent
-                                    key={msg.id}
-                                    currentUser={msg.from === id}
-                                    content={msg} />
-                            ) : (
-                                <TextContent
-                                    key={msg.id}
-                                    currentUser={msg.from === id}
-                                    content={msg}
-                                />
-                            )
-                        )}
+                        {Object.keys(groupedMessages).map((date) => (
+                            <React.Fragment key={date}>
+                                <div className="col-span-12 text-center text-gray-500 my-2">
+                                    {renderDateHeader(date)}
+                                </div>
+                                {groupedMessages[date].map((msg: any) =>
+                                    msg.is_file ? (
+                                        <FileContent
+                                            key={msg.id}
+                                            currentUser={msg.from === id}
+                                            content={msg} />
+                                    ) : (
+                                        <TextContent
+                                            key={msg.id}
+                                            currentUser={msg.from === id}
+                                            content={msg}
+                                        />
+                                    )
+                                )}
+                            </React.Fragment>
+                        ))}
                         {storedFile && <FileUpload file={storedFile} />}
                         {typingUsers?.length > 0 && typingUsers.map((user: any) => (
                             <Typing key={user.id} user={user?.user_metadata} />
