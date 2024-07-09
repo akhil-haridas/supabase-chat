@@ -45,40 +45,28 @@ const Message = () => {
     const handleFileChange = (event: any) => {
         const file = event.target.files[0];
         if (file) {
-            console.log('Selected file:', file);
             dispatch(storeFile(file));
         }
     };
 
     useEffect(() => {
         const updateTypingStatus = async () => {
-            const { data, error } = await supabaseClient
-                .from("typing")
-                .select("*")
-                .eq("user_id", id)
-                .single();
+            const typingChannel = supabaseClient.channel('user_typing');
+            typingChannel.subscribe();
 
-            if (error && error.code !== "PGRST116") {
-                console.error("Error fetching typing status:", error);
-                return;
-            }
+            const notifyTyping = (typing: boolean) => {
+                typingChannel.send({
+                    type: 'broadcast',
+                    event: 'USER_TYPING',
+                    payload: { user_id: id, typing },
+                });
+            };
+            notifyTyping(isTyping);
 
-            if (data) {
-                const { error: updateError } = await supabaseClient
-                    .from("typing")
-                    .update({ is_typing: isTyping })
-                    .eq("user_id", id);
-
-                if (updateError)
-                    console.error("Error updating typing status:", updateError);
-            } else {
-                const { error: insertError } = await supabaseClient
-                    .from("typing")
-                    .insert({ user_id: id, is_typing: isTyping });
-
-                if (insertError)
-                    console.error("Error inserting typing status:", insertError);
-            }
+            return () => {
+                notifyTyping(false);
+                typingChannel.unsubscribe();
+            };
         };
 
         updateTypingStatus();

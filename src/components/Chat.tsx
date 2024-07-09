@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useState, useRef } from "react";
-import { FileContent, FileUpload, TextContent, Typing } from "./utils";
+import { FileContent, FileUpload, TextContent } from "./utils";
 import { Loading } from "../pages";
 import { supabaseClient } from "../supabase/supabaseClient";
 import { useSelector } from "react-redux";
@@ -9,7 +9,6 @@ import { format, isThisWeek, isToday, isYesterday, parseISO, } from 'date-fns';
 
 const ChatMessages = () => {
     const [messages, setMessages] = useState<any[]>([]);
-    const [typingUsers, setTypingUsers] = useState<any>([]);
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const { id } = useSelector((state: RootState) => state.user.userData);
@@ -80,36 +79,6 @@ const ChatMessages = () => {
         scrollToBottom();
     }, [messages, storedFile]);
 
-    useEffect(() => {
-        const channel = supabaseClient
-            .channel("chat-room1")
-            .on(
-                "postgres_changes",
-                { event: "*", schema: "public", table: "typing" },
-                async (payload: any) => {
-                    if (payload.new.user_id !== id) {
-                        const user = await getUserById(payload?.new?.user_id);
-                        setTypingUsers((prevTypingUsers: any[]) => {
-                            const newTypingUsers = new Set(prevTypingUsers.map((u) => u.id));
-
-                            if (payload?.new?.is_typing) {
-                                if (!newTypingUsers.has(user.id)) {
-                                    return [...prevTypingUsers, user];
-                                }
-                            } else {
-                                return prevTypingUsers.filter((preUser: any) => preUser.id !== user.id);
-                            }
-                        });
-                        scrollToBottom();
-                    }
-                }
-            )
-            .subscribe();
-
-        return () => {
-            channel.unsubscribe();
-        };
-    }, []);
 
     const groupMessagesByDate = (messages: any[]) => {
         const groupedMessages: { [key: string]: any[] } = {};
@@ -168,9 +137,6 @@ const ChatMessages = () => {
                             </React.Fragment>
                         ))}
                         {storedFile && <FileUpload file={storedFile} />}
-                        {typingUsers?.length > 0 && typingUsers.map((user: any) => (
-                            <Typing key={user.id} user={user?.user_metadata} />
-                        ))}
                         <div ref={messagesEndRef}></div>
                     </div>
                 </div>

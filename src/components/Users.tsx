@@ -43,7 +43,7 @@ const Chatlist = () => {
             ) : (
                 <div className="flex flex-col mt-4 -mx-2 mb-4 overflow-y-auto">
                     {users.map((user: any) => (
-                        <User key={user.id} user={user?.user_metadata} />
+                        <User key={user.id} user={user?.user_metadata} userId= {user.id} />
                     ))}
                 </div>
             )}
