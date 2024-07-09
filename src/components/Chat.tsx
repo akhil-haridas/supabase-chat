@@ -5,7 +5,7 @@ import { supabaseClient } from "../supabase/supabaseClient";
 import { useSelector } from "react-redux";
 import { RootState } from "../context/store";
 import { supabaseAdmin } from "../supabase/supabaseAdmin";
-import { format, isToday, isYesterday, parseISO } from 'date-fns';
+import { format, isThisWeek, isToday, isYesterday, parseISO, } from 'date-fns';
 
 const ChatMessages = () => {
     const [messages, setMessages] = useState<any[]>([]);
@@ -129,10 +129,13 @@ const ChatMessages = () => {
             return "Today";
         } else if (isYesterday(parsedDate)) {
             return "Yesterday";
+        } else if (isThisWeek(parsedDate)) {
+            return format(parsedDate, 'EEEE');
         } else {
             return format(parsedDate, 'MMMM dd, yyyy');
         }
     };
+    ;
 
     const groupedMessages = groupMessagesByDate(messages);
 

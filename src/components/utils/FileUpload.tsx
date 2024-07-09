@@ -42,16 +42,16 @@ const FileUpload: React.FC<any> = ({ file }) => {
         const fileExt = uploadFile.name.split(".").pop();
         const fileName = `${Math.random()}.${fileExt}`;
         const filePath = `${fileName}`;
-
+        const fileType = uploadFile.type;
         const { data, error } = await supabaseClient.storage.from("supabase-chat").upload(filePath, uploadFile);
         if (error) console.log(error, data);
 
         const { data: url } = await supabaseClient.storage.from("supabase-chat").getPublicUrl(filePath);
-        await sendMessage(url)
+        await sendMessage(url, fileType)
     }
 
-    const sendMessage = async (imageUrl: any) => {
-        const { error } = await supabaseClient.from("messages").insert({ message: imageUrl, is_file: true });
+    const sendMessage = async (imageUrl: any, fileType: any) => {
+        const { error } = await supabaseClient.from("messages").insert({ message: imageUrl, is_file: true, file_type: fileType });
         if (error) console.log("error:", error);
         handleCancelFileUpload();
     };
