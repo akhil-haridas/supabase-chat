@@ -55,7 +55,7 @@ const FileUpload: React.FC<any> = ({ file }) => {
         if (error) console.log("error:", error);
         handleCancelFileUpload();
     };
-
+    console.log(uploadFile)
     return (
         <section className="col-start-9 col-end-13 p-3 rounded-lg">
             <div className="max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden items-center">
@@ -68,16 +68,16 @@ const FileUpload: React.FC<any> = ({ file }) => {
                             id="upload"
                             type="file"
                             className="hidden"
-                            accept="image/*"
                             onChange={handleFileChange}
                         />
                         {uploadFile && imagePreviewUrl ? (
-                            <img
+                            uploadFile.type.startsWith('/image') ? (<img
                                 src={imagePreviewUrl}
                                 className="max-h-48 rounded-lg mx-auto"
                                 alt="Image preview"
                                 onClick={() => document.getElementById("upload")?.click()}
-                            />
+                            />) : <span>{uploadFile.name}</span>
+
                         ) : (
                             <label htmlFor="upload" className="cursor-pointer">
                                 <svg
