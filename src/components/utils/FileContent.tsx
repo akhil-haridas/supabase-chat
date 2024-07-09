@@ -1,4 +1,5 @@
 import React from "react";
+import { supabaseClient } from "../../supabase/supabaseClient";
 
 interface ContentProps {
     currentUser: boolean;
@@ -22,10 +23,32 @@ const FileContent: React.FC<ContentProps> = ({ currentUser, content }) => {
         const ampm = hours >= 12 ? "pm" : "am";
         hours = hours % 12;
         hours = hours ? hours : 12;
-        const formattedTime = `${hours}:${minutes < 10 ? "0" + minutes : minutes} ${ampm}`;
+        const formattedTime = `${hours}:${minutes < 10 ? "0" + minutes : minutes
+            } ${ampm}`;
         return formattedTime;
     };
 
+    const handleDownloadFile = async (url: any) => {
+        try {
+            const filenameRegex = /\/([^/]+)$/;
+            const match = url.match(filenameRegex);
+            if (match) {
+                // const filename = match[1];
+                // const { data, error } = await supabaseClient.storage.from('supabase-chat').download(filename)
+                // if (error) {
+                //     console.error("Error downloading file:", error);
+                //     return;
+                // }
+                // const newUrl = URL.createObjectURL(data);
+                // window.open(newUrl)
+            } else {
+                console.error("Failed to extract filename from URL.");
+            }
+            window.open(url, "_blank");
+        } catch (error) {
+            console.error("Error downloading file:", error);
+        }
+    }
 
     const UserAvatar = ({ picture }: { picture: string }) => (
         <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
@@ -34,12 +57,21 @@ const FileContent: React.FC<ContentProps> = ({ currentUser, content }) => {
     );
 
     const MessageBubble = ({ children, user, createdAt }: any) => (
-        <div className={`relative text-sm ${currentUser ? "mr-3 bg-indigo-100" : 'ml-3 bg-white'} py-4 px-4 shadow rounded-xl`}>
-            <div className={`absolute text-xs -top-1 ${currentUser ? "right-0 flex justify-end" : 'left-0'} min-w-500 -mt-4 font-bold mr-2 text-gray-500`}>
+        <div
+            className={`relative text-sm ${currentUser ? "mr-3 bg-indigo-100" : "ml-3 bg-white"
+                } py-4 px-4 shadow rounded-xl`}
+        >
+            <div
+                className={`absolute text-xs -top-1 ${currentUser ? "right-0 flex justify-end" : "left-0"
+                    } min-w-500 -mt-4 font-bold mr-2 text-gray-500`}
+            >
                 {currentUser ? "You" : user?.name}
             </div>
             {children}
-            <div className={`absolute text-xs bottom-0 ${currentUser ? "right-0 flex justify-end" : 'left-0'} min-w-44 -mb-5 mr-2 text-gray-500`}>
+            <div
+                className={`absolute text-xs bottom-0 ${currentUser ? "right-0 flex justify-end" : "left-0"
+                    } min-w-44 -mb-5 mr-2 text-gray-500`}
+            >
                 {formatTime(new Date(createdAt))}
             </div>
         </div>
@@ -50,7 +82,11 @@ const FileContent: React.FC<ContentProps> = ({ currentUser, content }) => {
             id="image-preview"
             className="max-w-sm bg-gray-10 rounded-lg items-center mx-auto"
         >
-            <img src={url} className="max-h-48 rounded-lg mx-auto" alt="Image preview" />
+            <img
+                src={url}
+                className="max-h-48 rounded-lg mx-auto"
+                alt="Image preview"
+            />
         </div>
     );
 
@@ -59,13 +95,16 @@ const FileContent: React.FC<ContentProps> = ({ currentUser, content }) => {
             id="video-preview"
             className="max-w-sm bg-gray-10 rounded-lg items-center mx-auto text-center cursor-pointer"
         >
-            <video src={url} className="max-h-48 rounded-lg mx-auto" controls muted loop autoPlay />
+            <video src={url} className="max-h-48 rounded-lg mx-auto" controls muted />
         </div>
     );
 
-    const OtherFilesPreview = () => (
+    const OtherFilesPreview = ({ url }: { url: string }) => (
         <div className="flex items-center justify-center">
-            <button className="relative z-0 inline-block overflow-visible rounded-full bg-gradient-to-r from-[#f5ae4a] to-[#f76e54] text-white transition duration-300 focus:outline-none">
+            <button
+                className="relative z-0 inline-block overflow-visible rounded-full bg-gradient-to-r from-[#f5ae4a] to-[#f76e54] text-white transition duration-300 focus:outline-none"
+                onClick={() => handleDownloadFile(url)}
+            >
                 <div className="relative flex items-center overflow-hidden rounded-full px-7 py-3 transition duration-125 hover:bg-opacity-10 active:bg-opacity-5">
                     <svg
                         className="mr-2 h-6 w-6"
@@ -90,20 +129,24 @@ const FileContent: React.FC<ContentProps> = ({ currentUser, content }) => {
     );
 
     const renderFilePreview = () => {
-        if (fileType.startsWith('image/')) {
+        if (fileType.startsWith("image/")) {
             return <ImagePreview url={fileUrl} />;
-        } else if (fileType.startsWith('video/')) {
+        } else if (fileType.startsWith("video/")) {
             return <VideoPreview url={fileUrl} />;
         } else {
-            return <OtherFilesPreview />;
+            return <OtherFilesPreview url={fileUrl} />;
         }
     };
 
     return (
         <div
-            className={`col-start-${currentUser ? 6 : 1} col-end-${currentUser ? 13 : 8} p-6 rounded-lg`}
+            className={`col-start-${currentUser ? 6 : 1} col-end-${currentUser ? 13 : 8
+                } p-6 rounded-lg`}
         >
-            <div className={`flex ${currentUser ? "flex-row-reverse" : "flex-row"} items-center`}>
+            <div
+                className={`flex ${currentUser ? "flex-row-reverse" : "flex-row"
+                    } items-center`}
+            >
                 <UserAvatar picture={content?.user?.picture} />
                 <MessageBubble user={content.user} createdAt={content.created_at}>
                     {renderFilePreview()}
