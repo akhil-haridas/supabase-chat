@@ -55,7 +55,7 @@ const FileUpload: React.FC<any> = ({ file }) => {
         if (error) console.log("error:", error);
         handleCancelFileUpload();
     };
-    console.log(uploadFile)
+
     return (
         <section className="col-start-9 col-end-13 p-3 rounded-lg">
             <div className="max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden items-center">
