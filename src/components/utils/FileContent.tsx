@@ -7,12 +7,14 @@ interface ContentProps {
         created_at: string;
         user: any;
         is_file: any;
+        file_type: any;
     };
 }
 
 const FileContent: React.FC<ContentProps> = ({ currentUser, content }) => {
     const messageData = JSON.parse(content.message);
-    const imageUrl = messageData.publicUrl;
+    const fileUrl = messageData.publicUrl;
+    const fileType = content.file_type;
 
     const formatTime = (date: Date) => {
         let hours = date.getHours();
@@ -23,6 +25,7 @@ const FileContent: React.FC<ContentProps> = ({ currentUser, content }) => {
         const formattedTime = `${hours}:${minutes < 10 ? "0" + minutes : minutes} ${ampm}`;
         return formattedTime;
     };
+
 
     const UserAvatar = ({ picture }: { picture: string }) => (
         <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
@@ -51,6 +54,45 @@ const FileContent: React.FC<ContentProps> = ({ currentUser, content }) => {
         </div>
     );
 
+    const VideoPreview = ({ url }: { url: string }) => (
+        <div
+            id="video-preview"
+            className="max-w-sm p-6 bg-gray-100 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer"
+        >
+            <video src={url} className="max-h-48 rounded-lg mx-auto" controls />
+        </div>
+    );
+
+    const PdfPreview = () => (
+        <div
+            id="pdf-preview"
+            className="max-w-sm p-6 bg-gray-100 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer"
+        >
+            <div>PDF File</div>
+        </div>
+    );
+
+    const OtherFilesPreview = () => (
+        <div
+            id="pdf-preview"
+            className="max-w-sm p-6 bg-gray-100 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer"
+        >
+            <div>Other files</div>
+        </div>
+    );
+
+    const renderFilePreview = () => {
+        if (fileType.startsWith('image/')) {
+            return <ImagePreview url={fileUrl} />;
+        } else if (fileType.startsWith('video/')) {
+            return <VideoPreview url={fileUrl} />;
+        } else if (fileType !== 'application/pdf') {
+            return <PdfPreview />;
+        } else {
+            return <OtherFilesPreview />;
+        }
+    };
+
     return (
         <div
             className={`col-start-${currentUser ? 6 : 1} col-end-${currentUser ? 13 : 8} p-6 rounded-lg`}
@@ -58,7 +100,7 @@ const FileContent: React.FC<ContentProps> = ({ currentUser, content }) => {
             <div className={`flex ${currentUser ? "flex-row-reverse" : "flex-row"} items-center`}>
                 <UserAvatar picture={content?.user?.picture} />
                 <MessageBubble user={content.user} createdAt={content.created_at}>
-                    <ImagePreview url={imageUrl} />
+                    {renderFilePreview()}
                 </MessageBubble>
             </div>
         </div>
