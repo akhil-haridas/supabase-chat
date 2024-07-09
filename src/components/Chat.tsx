@@ -143,8 +143,10 @@ const ChatMessages = () => {
                     <div className="grid grid-cols-12 gap-y-2">
                         {Object.keys(groupedMessages).map((date) => (
                             <React.Fragment key={date}>
-                                <div className="col-span-12 text-center text-gray-500 my-2">
-                                    {renderDateHeader(date)}
+                                <div className="col-span-12 my-2 items-center flex justify-center">
+                                    <div className="text-center text-white bg-gray-400 min-w-40 rounded-full">
+                                        {renderDateHeader(date)}
+                                    </div>
                                 </div>
                                 {groupedMessages[date].map((msg: any) =>
                                     msg.is_file ? (
