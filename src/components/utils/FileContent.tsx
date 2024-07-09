@@ -1,5 +1,5 @@
 import React from "react";
-import { supabaseClient } from "../../supabase/supabaseClient";
+// import { supabaseClient } from "../../supabase/supabaseClient";
 
 interface ContentProps {
     currentUser: boolean;
