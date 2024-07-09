@@ -57,9 +57,9 @@ const FileContent: React.FC<ContentProps> = ({ currentUser, content }) => {
     const VideoPreview = ({ url }: { url: string }) => (
         <div
             id="video-preview"
-            className="max-w-sm p-6 bg-gray-100 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer"
+            className="max-w-sm bg-gray-10 rounded-lg items-center mx-auto text-center cursor-pointer"
         >
-            <video src={url} className="max-h-48 rounded-lg mx-auto" controls />
+            <video src={url} className="max-h-48 rounded-lg mx-auto" controls muted loop autoPlay />
         </div>
     );
 
