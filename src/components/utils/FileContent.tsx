@@ -63,21 +63,29 @@ const FileContent: React.FC<ContentProps> = ({ currentUser, content }) => {
         </div>
     );
 
-    const PdfPreview = () => (
-        <div
-            id="pdf-preview"
-            className="max-w-sm p-6 bg-gray-100 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer"
-        >
-            <div>PDF File</div>
-        </div>
-    );
-
     const OtherFilesPreview = () => (
-        <div
-            id="pdf-preview"
-            className="max-w-sm p-6 bg-gray-100 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer"
-        >
-            <div>Other files</div>
+        <div className="flex items-center justify-center">
+            <button className="relative z-0 inline-block overflow-visible rounded-full bg-gradient-to-r from-[#f5ae4a] to-[#f76e54] text-white transition duration-300 focus:outline-none">
+                <div className="relative flex items-center overflow-hidden rounded-full px-7 py-3 transition duration-125 hover:bg-opacity-10 active:bg-opacity-5">
+                    <svg
+                        className="mr-2 h-6 w-6"
+                        viewBox="0 0 24 24"
+                        width="24"
+                        height="24"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        fill="none"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                    >
+                        <path d="M8 17l4 4 4-4" />
+                        <path d="M12 12v9" />
+                        <path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29" />
+                    </svg>
+                    <span className="text-base">Download File</span>
+                    <div className="absolute inset-0 transform -skew-x-12 translate-x-[-100%] bg-gradient-to-r from-transparent via-white/30 to-transparent transition duration-750 hover:translate-x-full"></div>
+                </div>
+            </button>
         </div>
     );
 
@@ -86,8 +94,6 @@ const FileContent: React.FC<ContentProps> = ({ currentUser, content }) => {
             return <ImagePreview url={fileUrl} />;
         } else if (fileType.startsWith('video/')) {
             return <VideoPreview url={fileUrl} />;
-        } else if (fileType !== 'application/pdf') {
-            return <PdfPreview />;
         } else {
             return <OtherFilesPreview />;
         }
