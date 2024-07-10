@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { supabaseClient } from "../../supabase/supabaseClient";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 
 interface UserProps {
     user: {
@@ -37,7 +35,9 @@ const User: React.FC<UserProps> = ({ user, userId }) => {
                 />
             </div>
             {isTyping ? (
-                <FontAwesomeIcon icon={faEllipsis} fade size="2x" className="ml-4" />
+                <div className="ml-2 text-sm font-semibold overflow-hidden text-ellipsis whitespace-nowrap text-left w-36">
+                    Typing<span className="tracking-widest">......</span>
+                </div>
             ) : (
                 <div className="ml-2 text-sm font-semibold overflow-hidden text-ellipsis whitespace-nowrap text-left w-36">
                     {user.name}

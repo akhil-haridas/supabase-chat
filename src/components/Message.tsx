@@ -34,7 +34,7 @@ const Message = () => {
             await sendMessage(e);
         } else {
             setIsTyping(true);
-            setTimeout(() => setIsTyping(false), 1000);
+            setTimeout(() => setIsTyping(false), 2000);
         }
     };
 
@@ -64,7 +64,6 @@ const Message = () => {
             notifyTyping(isTyping);
 
             return () => {
-                notifyTyping(false);
                 typingChannel.unsubscribe();
             };
         };
