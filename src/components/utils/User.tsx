@@ -35,7 +35,7 @@ const User: React.FC<UserProps> = ({ user, userId }) => {
                 />
             </div>
             {isTyping ? (
-                <div className="ml-2 text-sm font-semibold overflow-hidden text-ellipsis whitespace-nowrap text-left w-36">
+                <div className="ml-2 text-sm font-semibold text-red-400 overflow-hidden text-ellipsis whitespace-nowrap text-left w-36">
                     Typing<span className="tracking-widest">......</span>
                 </div>
             ) : (
