@@ -9,7 +9,7 @@ import { ChatPage, Loading, LoginPage } from "./pages";
 import { supabaseClient } from "./supabase/supabaseClient";
 import { useDispatch } from "react-redux";
 import { setUserData } from "./context/slices/userSlice";
-
+console.log("Rendered")
 const App = () => {
   const [session, setSession] = useState<any>(null);
   const [user, setUser] = useState<any>(null);
