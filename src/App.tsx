@@ -5,7 +5,6 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-... hello
 import { ChatPage, Loading, LoginPage } from "./pages";
 import { supabaseClient } from "./supabase/supabaseClient";
 import { useDispatch } from "react-redux";
