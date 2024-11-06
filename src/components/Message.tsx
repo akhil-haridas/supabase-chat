@@ -5,6 +5,9 @@ import Picker from "@emoji-mart/react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../context/store";
 import { storeFile } from "../context/slices/userSlice";
+import io from "socket.io-client";
+
+const socket = io("https://notification-webpush.onrender.com"); 
 
 const Message = () => {
     const [message, setMessage] = useState("");
@@ -19,6 +22,7 @@ const Message = () => {
         e.preventDefault();
         if (message.trim() === "") return;
         const { error } = await supabaseClient.from("messages").insert({ message, is_file: false });
+        socket.emit("chatMessage", message);
         setMessage("");
         setIsTyping(false);
         if (error) console.log("error:", error);
